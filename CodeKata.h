@@ -20,8 +20,11 @@ public:
 	int TO_PARSE_PER_DIGIT = 3;
 	CodeKata();
 	virtual ~CodeKata();
-	vector<string> parseKataAcctNumber(string kataAcctNum);
+	string acctNumToString(string kataAcctNum);
 	int mapToInt(string kataInput);
+	vector<int> parseKataAcctNumber(string kataAcctNum);
+	int processInput();
+	bool validateKataChecksum(vector<int> kataParsedToInts);
 private:
 	//Eight segment display string to integer map
 	std::tr1::unordered_map<string, int> eightSegToIntMap;
