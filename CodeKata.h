@@ -14,6 +14,9 @@ using namespace std;
 
 class CodeKata {
 public:
+	//NOTE: All of these excluding the constructors and "proccessInput"
+	//can be made private, but doing so will cause the tests in CodeKataTests.cpp
+	//to fail
 	int NUM_LINES_PER_ACCT = 3;
 	int ACCT_NUM_DIGITS = 9;
 	//Number of characters to parse per digit per input line
@@ -26,7 +29,6 @@ public:
 	int processInput();
 	bool validateKataChecksum(vector<int> kataParsedToInts);
 private:
-	//Eight segment display string to integer map
 	std::tr1::unordered_map<string, int> eightSegToIntMap;
 	void initEightSegToIntMap();
 };

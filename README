@@ -1,0 +1,8 @@
+g++ version: 4.8
+Other g++ compiler flags: -c -fmessage-length=0 -std=c++11
+Tests performed using CppUTest on Linux Mint 16
+
+The test file I used is included in this repo and is entitled kataTestInput.txt.
+There are only a few account numbers in the file that have been copied/pasted many times in order to test the speed of my program. Included is at least one valid account number, one with formatting errors, and one that failed the checksum.
+
+I hope you like it! =]

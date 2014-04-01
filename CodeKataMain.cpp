@@ -9,6 +9,7 @@
 
 int main(int argc, char **argv){
 	CodeKata myCodeKata;
+	//Process CodeKata input
 	return myCodeKata.processInput();
 }
 

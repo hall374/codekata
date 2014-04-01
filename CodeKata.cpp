@@ -59,6 +59,7 @@ string CodeKata::acctNumToString(string kataAcctNum) {
 int CodeKata::mapToInt(string kataDigit) {
 	std::tr1::unordered_map<string, int> kataMap = this->eightSegToIntMap;
 	std::tr1::unordered_map<string, int>::const_iterator kataMapFindResults =  this->eightSegToIntMap.find(kataDigit);
+	//Return -1 if kataDigit is not found in kataMap
 	if(kataMapFindResults == kataMap.end()){
 		return -1;
 	}
@@ -92,15 +93,59 @@ vector<int> CodeKata::parseKataAcctNumber(string kataAcctNum){
 	return kataParsedToInts;
 }
 
+//Process CodeKata input file and write result to file
 int CodeKata::processInput() {
-	ifstream kataInputFile;
-	string kataFilePath;
-	while(!kataInputFile.is_open()){
-		cout << "Enter absolute path to Code Kata input file: ";
-		cin >> kataFilePath;
-		kataInputFile.open(kataFilePath.c_str());
+		ifstream kataInputFile;
+		string kataInputFilePath;
+		ofstream kataOutputFile;
+		string kataOutputFilePath;
+		bool inputFileError = false;
+		bool outputFileError = false;
+		cout << "Welcome to Tim's Kata Bank OCR! =]" << endl;
+		//Loop until valid file path is entered
+		while(!kataInputFile.is_open()){
+			if(inputFileError)
+				cout << "File " << kataInputFilePath << " could not be opened..." << endl;
+			cout << "Enter absolute path to Code Kata input file: ";
+			cin >> kataInputFilePath;
+			kataInputFile.open(kataInputFilePath.c_str());
+			inputFileError = true;
+		}
+		while(!kataOutputFile.is_open()){
+			if(outputFileError)
+				cout << "File " << kataOutputFilePath << " could not be opened..." << endl;
+			cout << "Enter absolute path to Code Kata output file: ";
+			cin >> kataOutputFilePath;
+			kataOutputFile.open(kataOutputFilePath.c_str());
+			outputFileError = true;
+		}
+		try{
+		string kataAcctNum = "";
+		string tempString = "";
+		//Assume input file is perfectly formatted
+		//If something goes wrong, catch general exception and write to output file
+		while (!kataInputFile.eof()){
+			kataAcctNum = "";
+			//Loop 4 lines at a time
+			for(int i = 0; i < 4; i++){
+				tempString = "";
+				getline(kataInputFile, tempString);
+				kataAcctNum += tempString;
+			}
+			kataOutputFile << this->acctNumToString(kataAcctNum) << endl;
+		}
+		cout << "Done! Open your output file " << kataOutputFilePath << " to see the results!" << endl;
 	}
-
+	catch(exception& e){
+		cout << "Exception occured while proccessing: " << e.what() << endl;
+		kataOutputFile << "Exception occured while proccessing: " << e.what() << endl;
+		//Close fstreams here in order to return bad exit code if exception is thrown
+		kataInputFile.close();
+		kataOutputFile.close();
+		return -1;
+	}
+	kataInputFile.close();
+	kataOutputFile.close();
 	return 0;
 }
 
@@ -117,7 +162,7 @@ bool CodeKata::validateKataChecksum(vector<int> kataParsedToInts) {
 		total += toMultiply * kataParsedToInts[i];
 		toMultiply--;
 	}
-	//Add d1 to total
+	//Add d1 to total since it has no multiplier in the checksum formula
 	total += kataParsedToInts[kataParsedToInts.size() - 1];
 	if(total % 11 == 0)
 		return true;
